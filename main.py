@@ -1,5 +1,8 @@
+from data import read_deposit_data
+
+
 def _main():
-    print('abc')
+    read_deposit_data('dataset/bank-full.csv')
 
 
 if __name__ == '__main__':
