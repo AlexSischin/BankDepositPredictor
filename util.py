@@ -41,7 +41,7 @@ def count_bar(series: Series, categorical, bins=10, integer=True):
     ax.set_xticks(x_numeric, x, rotation=45, ha='right')
 
 
-def plot_correlation(corr: DataFrame):
+def correlation_matrix(corr: DataFrame):
     corr.style.background_gradient(cmap='coolwarm').format(precision=2)
     fig, ax = plt.subplots()
     ax.matshow(corr)
