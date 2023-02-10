@@ -1,3 +1,4 @@
+from collections import defaultdict
 from numbers import Number
 
 import numpy as np
@@ -12,6 +13,41 @@ def _float_interval_to_str(i: Interval):
 
 def _int_interval_to_str(i: Interval):
     return f'({int(np.floor(i.left))},{int(np.floor(i.right))}]'
+
+
+def positive_class_probability(independent_vals: Series, class_vals: Series, positive_class: object, categorical,
+                               bins=10, integer=True, sort=True):
+    _, ax = plt.subplots()
+    ax.set_xlabel(f'{independent_vals.name}')
+    ax.set_ylabel(f'Probability of class: {positive_class}')
+
+    class_map = defaultdict(lambda: 0)
+    class_map[positive_class] = 1
+    class_vals = class_vals.map(class_map)
+
+    if not categorical:
+        if isinstance(bins, Number):
+            bins = np.linspace(independent_vals.min(), independent_vals.max(), bins + 1)
+        if integer:
+            bins = np.rint(bins).astype(np.int64)
+        interval_mapper = _int_interval_to_str if integer else _float_interval_to_str
+        independent_vals = pd.cut(independent_vals, bins, include_lowest=True).map(interval_mapper)
+
+    col_values, col_class, col_probabilities = 'values', 'class', 'probabilities'
+
+    class_df = pd.concat([independent_vals, class_vals], axis=1)
+    class_df.columns = col_values, col_class
+    probabilities_df = class_df.groupby(by=col_values).mean().reset_index()
+    probabilities_df.columns = col_values, col_probabilities
+
+    if categorical and sort:
+        probabilities_df.sort_values(by=col_probabilities, ascending=False, inplace=True)
+
+    x = probabilities_df[col_values]
+    y = probabilities_df[col_probabilities]
+    x_numeric = np.arange(x.size)
+    ax.bar(x_numeric, y)
+    ax.set_xticks(x_numeric, x, rotation=45, ha='right')
 
 
 def count_bar(series: Series, categorical, bins=10, integer=True):
