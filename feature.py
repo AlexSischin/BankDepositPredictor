@@ -26,8 +26,7 @@ def create_polynom(series: Series, degree: int, drop_first=True) -> list[Series]
     return term_series[1:] if drop_first else term_series
 
 
-# Category to mean target mapper
-class CMVMapper:
+class MeanTargetMapper:
     def __init__(
             self,
             categories: Series,
@@ -55,8 +54,7 @@ class CMVMapper:
         return self._value_dict
 
 
-# Category to dummies mapper
-class CDMapper:
+class OneHotMapper:
     def __init__(
             self,
             categories: Series
