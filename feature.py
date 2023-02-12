@@ -1,7 +1,15 @@
 from numbers import Number
 
 import pandas as pd
-from pandas import Series
+from pandas import Series, DataFrame
+
+
+def concat_series(df: DataFrame, *args: Series) -> DataFrame:
+    rows = df.shape[0]
+    for a in args:
+        if a.size != rows:
+            raise ValueError(f'All series must have the same length as dataframe. Got: {a.size} ({a.name})')
+    return pd.concat([df, pd.concat(args, axis=1, ignore_index=True)], axis=1, ignore_index=True)
 
 
 def create_polynom(series: Series, degree: int, drop_first=True) -> list[Series]:
