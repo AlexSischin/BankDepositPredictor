@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 
-from util import positive_class_probability
+from util import positive_class_probability, count_bar
 
 pd.options.display.max_columns = 50
 pd.options.mode.use_inf_as_na = True
@@ -28,7 +29,7 @@ COL_Y = 'y'
 def read_deposit_data(file: str):
     deposit_df = pd.read_csv(file, sep=';')
     # print(deposit_df.info())
-    positive_class_probability(deposit_df[COL_POUTCOME], deposit_df[COL_Y], 'yes', categorical=True)
-    # count_bar(deposit_df[COL_PDAYS], categorical=False, bins=np.concatenate([[-2], np.linspace(-1, 871, 10)]))
+    # positive_class_probability(deposit_df[COL_PREVIOUS], deposit_df[COL_Y], 'yes', categorical=False, bins=np.arange(0, 20))
+    count_bar(deposit_df[COL_PREVIOUS], categorical=False, bins=np.arange(0, 20))
     # plot_correlation(deposit_df.corr(numeric_only=True))
     plt.show()
