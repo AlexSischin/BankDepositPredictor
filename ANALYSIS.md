@@ -5,13 +5,9 @@
 | Input variable                | X        | Any given info based on which we must predict result            |
 | Positive class probability    | P(y=1)   | Probability that client would subscribe a term deposit          |
 | Linear feature                | -        | Feature equal to X                                              |
-| Dummy feature                 | -        | Discrete binary variable for a value of X                       |
 | Probability feature           | -        | P(y=1) for every unique value of an X                           |
 | Linear probability feature    | -        | Inverse logistic function of probability feature                |
 | Polynomial series of features | -        | Set of features, each representing some order of magnitude of X |
-
-* P(y=1) - probability that client would subscribe a deposit (positive class).
-* Linear probability - inverse logistic function of P(y=1).
 
 # Overview
 
@@ -35,9 +31,9 @@ integer; non-null; [18, 95]
 
 ![img_23.png](img/img_23.png)
 
-Numeric data. P(y=1) decreases until age 50 and then increases. It's not how logistic function behaves. So, we're going
-to derive a **polynomial series** of features from this column. From the graph we see that there are very few examples
-with value > 80. This might lead to overfitting. We can't find more examples, so we'll try to filter out these examples.
+Numeric data. We'll derive a **polynomial series** of features from this column. From the graph we see that there are
+very few examples with value > 80. This might lead to overfitting. We can't find more examples, so we'll try to filter
+out them.
 
 ### Job [1]
 
@@ -47,7 +43,7 @@ text; non-null
 
 ![img_24.png](img/img_24.png)
 
-This is categorical data. We'll derive **dummy**, **probability** and **linear probability** features from this one to
+This is categorical data. We'll derive **one-hot**, **probability** and **linear probability** features from this one to
 see which one behaves better.
 
 ### Marital [2]
@@ -60,7 +56,7 @@ text; non-null
 
 ![img_25.png](img/img_25.png)
 
-This is categorical data. We'll derive **dummy**, **probability** and **linear probability** features from this one to
+This is categorical data. We'll derive **one-hot**, **probability** and **linear probability** features from this one to
 see which one behaves better.
 
 ### Education [3]
@@ -71,7 +67,7 @@ text; non-null
 
 ![img_26.png](img/img_26.png)
 
-This is categorical data. We'll derive **dummy**, **probability** and **linear probability** features from this one to
+This is categorical data. We'll derive **one-hot**, **probability** and **linear probability** features from this one to
 see which one behaves better.
 
 ### Default [4]
@@ -84,8 +80,7 @@ text; non-null
 
 ![img_27.png](img/img_27.png)
 
-This is binary data. Seems to be the perfect case for introducing a dummy feature. But we'll derive **dummy**, **
-probability** and **linear probability** features from this one to see for sure which one behaves better.
+This is binary data. The perfect case for **one-hot** encoding.
 
 ### Balance [5]
 
@@ -99,8 +94,8 @@ integer; non-null; [-8019, 102127]
 
 ![img_28.png](img/img_28.png)
 
-Numeric data. It seems to affect P(y=1) in a slightly linear manner. Also, we have spikes of probability due to lack of
-examples with value > 36039. This may lead to overfitting problem, so we'll try to filter out these examples.
+Numeric data. We'll derive **polynomial series** of features from this one. Also, we have spikes of probability due to
+lack of examples with value > 36039. This may lead to overfitting problem, so we'll try to filter out these examples.
 
 ### Housing [6]
 
@@ -112,8 +107,7 @@ text; non-null
 
 ![img_29.png](img/img_29.png)
 
-This is binary data. Seems to be the perfect case for introducing a dummy feature. But we'll derive **dummy**, **
-probability** and **linear probability** features from this one to see for sure which one behaves better.
+This is binary data. The perfect case for **one-hot** encoding.
 
 ### Loan [7]
 
@@ -125,8 +119,7 @@ text; non-null
 
 ![img_30.png](img/img_30.png)
 
-This is binary data. Seems to be the perfect case for introducing a dummy feature. But we'll derive **dummy**, **
-probability** and **linear probability** features from this one to see for sure which one behaves better.
+This is binary data. The perfect case for **one-hot** encoding.
 
 ### Contact [8]
 
@@ -138,7 +131,7 @@ text; non-null
 
 ![img_31.png](img/img_31.png)
 
-This is categorical data. We'll derive **dummy**, **probability** and **linear probability** features from this one to
+This is categorical data. We'll derive **one-hot**, **probability** and **linear probability** features from this one to
 see which one behaves better.
 
 ### Day [9]
@@ -152,9 +145,9 @@ integer; non-null; [1, 31]
 ![img_32.png](img/img_32.png)
 
 Both numeric and categorical data. There might be a slight correlation between the size of the number and P(y=1). But
-also it's likely that people tend to take biased decisions depending on specific dates. So we'll derive a **linear**
-feature for sure, and also **dummy**, **probability** and **linear probability** features to see which one behaves
-better.
+also it's likely that people tend to take biased decisions depending on specific dates. So we'll derive a **polynomial
+series** of features, as well as **one-hot**, **probability** and **linear probability** features to see which one
+behaves better.
 
 ### Month [10]
 
@@ -166,10 +159,8 @@ text; non-null
 
 ![img_33.png](img/img_33.png)
 
-Categorical data. If we convert months to digits corresponding to their order, the function of P(y=1) will be wavy.
-Furthermore, variable has a very limited set of possible values. Thus, it's not efficient to fit a polynomial. Instead,
-we'll derive **dummy**, **probability** and **linear probability** features from this one to see which one behaves
-better.
+Categorical data. We'll derive **one-hot**, **probability** and **linear probability** features from this one
+to see which one behaves better.
 
 ### Duration [11]
 
@@ -183,8 +174,7 @@ integer; non-null; [0, 4918]
 
 ![img_34.png](img/img_34.png)
 
-Numeric data. It doesn't look much like a logistic function, so we'll derive a **polynomial series** of features from
-this one.
+Numeric data. We'll derive a **polynomial series** of features from this one.
 
 ### Campaign [12]
 
@@ -198,13 +188,13 @@ integer; non-null; [1, 63]
 
 ![img_35.png](img/img_35.png)
 
-Numeric data. Looks like a logistic function with a negative weight. We'll derive a **linear** feature. Also, notice
-that there are very few examples with value > 32. So, we'll try to filter them out to prevent overfitting.
+Numeric data. Looks like a logistic function with a negative weight. We'll derive a **polynomial series** of features.
+Also, notice that there are very few examples with value > 32. So, we'll try to filter them out to prevent overfitting.
 
 ### PDays [13]
 
-Number of days that passed by after the client was last contacted from a previous campaign (-1 means client was
-not previously contacted).
+Number of days that passed by after the client was last contacted from a previous campaign (-1 means client was not
+previously contacted).
 
 integer; non-null; [-1, 871]
 
@@ -214,11 +204,10 @@ integer; non-null; [-1, 871]
 
 ![img_36.png](img/img_36.png)
 
-Both numerical and categorical. First of all, it doesn't look like a logistic function, so we'll derive a **polynomial
-series** of features for this X. Also, it has a special value of -1, which will add a bias to polynomial at this exact
-point. In order to prevent polynomial from distortion we'll also introduce a **dummy** variable for this special case.
-And finally, notice that there are very few examples with value > 580. So, we'll try to filter them out to prevent
-overfitting.
+Both numerical and categorical. We'll derive a **polynomial series** of features for this X. Also, it has a special
+value of -1, which will add a bias to polynomial at this exact point. In order to prevent polynomial from distortion
+we'll also introduce a **one-hot** variable for this special case. And finally, notice that there are very few examples
+with value > 580. So, we'll try to filter them out to prevent overfitting.
 
 ### Previous [14]
 
@@ -238,8 +227,8 @@ integer; non-null; [0, 275]
 
 ![img_40.png](img/img_40.png)
 
-Numeric data. Looks much like a sigmoid function with a negative weight. Therefore, we'll derive a **linear** feature.
-Also, there are very few examples with value > 13. So, we'll try to filter them out to prevent overfitting.
+Numeric data. We'll derive a **polynomial series** of features. Also, there are very few examples with value > 13. So,
+we'll try to filter them out to prevent overfitting.
 
 ### POutcome [15]
 
@@ -251,7 +240,7 @@ text; non-null
 
 ![img_38.png](img/img_38.png)
 
-This is categorical data. We'll derive **dummy**, **probability** and **linear probability** features from this one to
+This is categorical data. We'll derive **one-hot**, **probability** and **linear probability** features from this one to
 see which one behaves better.
 
 ### Y [16]
