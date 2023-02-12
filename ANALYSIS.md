@@ -15,7 +15,7 @@
 
 # Overview
 
-![img.png](img.png)
+![img.png](img/img.png)
 
 ```text
 RangeIndex: 45211 entries, 0 to 45210
@@ -31,9 +31,9 @@ dtypes: int64(7), object(10)
 
 integer; non-null; [18, 95]
 
-![img_1.png](img_1.png)
+![img_1.png](img/img_1.png)
 
-![img_23.png](img_23.png)
+![img_23.png](img/img_23.png)
 
 Numeric data. P(y=1) decreases until age 50 and then increases. It's not how logistic function behaves. So, we're going
 to derive a **polynomial series** of features from this column. From the graph we see that there are very few examples
@@ -43,9 +43,9 @@ with value > 80. This might lead to overfitting. We can't find more examples, so
 
 text; non-null
 
-![img_2.png](img_2.png)
+![img_2.png](img/img_2.png)
 
-![img_24.png](img_24.png)
+![img_24.png](img/img_24.png)
 
 This is categorical data. We'll derive **dummy**, **probability** and **linear probability** features from this one to
 see which one behaves better.
@@ -56,9 +56,9 @@ Marital status. Note: "divorced" means divorced or widowed.
 
 text; non-null
 
-![img_3.png](img_3.png)
+![img_3.png](img/img_3.png)
 
-![img_25.png](img_25.png)
+![img_25.png](img/img_25.png)
 
 This is categorical data. We'll derive **dummy**, **probability** and **linear probability** features from this one to
 see which one behaves better.
@@ -67,9 +67,9 @@ see which one behaves better.
 
 text; non-null
 
-![img_4.png](img_4.png)
+![img_4.png](img/img_4.png)
 
-![img_26.png](img_26.png)
+![img_26.png](img/img_26.png)
 
 This is categorical data. We'll derive **dummy**, **probability** and **linear probability** features from this one to
 see which one behaves better.
@@ -80,9 +80,9 @@ Has credit in default?
 
 text; non-null
 
-![img_5.png](img_5.png)
+![img_5.png](img/img_5.png)
 
-![img_27.png](img_27.png)
+![img_27.png](img/img_27.png)
 
 This is binary data. Seems to be the perfect case for introducing a dummy feature. But we'll derive **dummy**, **
 probability** and **linear probability** features from this one to see for sure which one behaves better.
@@ -93,11 +93,11 @@ Average yearly balance, in euros
 
 integer; non-null; [-8019, 102127]
 
-![img_6.png](img_6.png)
+![img_6.png](img/img_6.png)
 
-![img_7.png](img_7.png)
+![img_7.png](img/img_7.png)
 
-![img_28.png](img_28.png)
+![img_28.png](img/img_28.png)
 
 Numeric data. It seems to affect P(y=1) in a slightly linear manner. Also, we have spikes of probability due to lack of
 examples with value > 36039. This may lead to overfitting problem, so we'll try to filter out these examples.
@@ -108,9 +108,9 @@ Has housing loan?
 
 text; non-null
 
-![img_8.png](img_8.png)
+![img_8.png](img/img_8.png)
 
-![img_29.png](img_29.png)
+![img_29.png](img/img_29.png)
 
 This is binary data. Seems to be the perfect case for introducing a dummy feature. But we'll derive **dummy**, **
 probability** and **linear probability** features from this one to see for sure which one behaves better.
@@ -121,9 +121,9 @@ Has personal loan?
 
 text; non-null
 
-![img_9.png](img_9.png)
+![img_9.png](img/img_9.png)
 
-![img_30.png](img_30.png)
+![img_30.png](img/img_30.png)
 
 This is binary data. Seems to be the perfect case for introducing a dummy feature. But we'll derive **dummy**, **
 probability** and **linear probability** features from this one to see for sure which one behaves better.
@@ -134,9 +134,9 @@ Contact communication type. Related with the last contact of the current campaig
 
 text; non-null
 
-![img_10.png](img_10.png)
+![img_10.png](img/img_10.png)
 
-![img_31.png](img_31.png)
+![img_31.png](img/img_31.png)
 
 This is categorical data. We'll derive **dummy**, **probability** and **linear probability** features from this one to
 see which one behaves better.
@@ -147,9 +147,9 @@ Last contact day of the month. Related with the last contact of the current camp
 
 integer; non-null; [1, 31]
 
-![img_11.png](img_11.png)
+![img_11.png](img/img_11.png)
 
-![img_32.png](img_32.png)
+![img_32.png](img/img_32.png)
 
 Both numeric and categorical data. There might be a slight correlation between the size of the number and P(y=1). But
 also it's likely that people tend to take biased decisions depending on specific dates. So we'll derive a **linear**
@@ -162,9 +162,9 @@ Last contact month of year. Related with the last contact of the current campaig
 
 text; non-null
 
-![img_12.png](img_12.png)
+![img_12.png](img/img_12.png)
 
-![img_33.png](img_33.png)
+![img_33.png](img/img_33.png)
 
 Categorical data. If we convert months to digits corresponding to their order, the function of P(y=1) will be wavy.
 Furthermore, variable has a very limited set of possible values. Thus, it's not efficient to fit a polynomial. Instead,
@@ -177,11 +177,11 @@ Last contact duration, in seconds. Related with the last contact of the current 
 
 integer; non-null; [0, 4918]
 
-![img_13.png](img_13.png)
+![img_13.png](img/img_13.png)
 
-![img_14.png](img_14.png)
+![img_14.png](img/img_14.png)
 
-![img_34.png](img_34.png)
+![img_34.png](img/img_34.png)
 
 Numeric data. It doesn't look much like a logistic function, so we'll derive a **polynomial series** of features from
 this one.
@@ -192,11 +192,11 @@ Number of contacts performed during this campaign and for this client (includes 
 
 integer; non-null; [1, 63]
 
-![img_15.png](img_15.png)
+![img_15.png](img/img_15.png)
 
-![img_16.png](img_16.png)
+![img_16.png](img/img_16.png)
 
-![img_35.png](img_35.png)
+![img_35.png](img/img_35.png)
 
 Numeric data. Looks like a logistic function with a negative weight. We'll derive a **linear** feature. Also, notice
 that there are very few examples with value > 32. So, we'll try to filter them out to prevent overfitting.
@@ -208,11 +208,11 @@ not previously contacted).
 
 integer; non-null; [-1, 871]
 
-![img_17.png](img_17.png)
+![img_17.png](img/img_17.png)
 
-![img_18.png](img_18.png)
+![img_18.png](img/img_18.png)
 
-![img_36.png](img_36.png)
+![img_36.png](img/img_36.png)
 
 Both numerical and categorical. First of all, it doesn't look like a logistic function, so we'll derive a **polynomial
 series** of features for this X. Also, it has a special value of -1, which will add a bias to polynomial at this exact
@@ -226,17 +226,17 @@ Number of contacts performed before this campaign and for this client
 
 integer; non-null; [0, 275]
 
-![img_19.png](img_19.png)
+![img_19.png](img/img_19.png)
 
-![img_20.png](img_20.png)
+![img_20.png](img/img_20.png)
 
-![img_39.png](img_39.png)
+![img_39.png](img/img_39.png)
 
-![img_41.png](img_41.png)
+![img_41.png](img/img_41.png)
 
-![img_37.png](img_37.png)
+![img_37.png](img/img_37.png)
 
-![img_40.png](img_40.png)
+![img_40.png](img/img_40.png)
 
 Numeric data. Looks much like a sigmoid function with a negative weight. Therefore, we'll derive a **linear** feature.
 Also, there are very few examples with value > 13. So, we'll try to filter them out to prevent overfitting.
@@ -247,9 +247,9 @@ Outcome of the previous marketing campaign.
 
 text; non-null
 
-![img_21.png](img_21.png)
+![img_21.png](img/img_21.png)
 
-![img_38.png](img_38.png)
+![img_38.png](img/img_38.png)
 
 This is categorical data. We'll derive **dummy**, **probability** and **linear probability** features from this one to
 see which one behaves better.
@@ -260,7 +260,7 @@ Has the client subscribed a term deposit?
 
 text; non-null
 
-![img_22.png](img_22.png)
+![img_22.png](img/img_22.png)
 
 Classes will be: 1 (yes), 0 (no).
 
