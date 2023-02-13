@@ -104,7 +104,7 @@ class ZScoreNormalizer:
 class SpecialValueMapper:
     def __init__(self,
                  series: Series,
-                 value: Number,
+                 value: object,
                  dtype=np.float64
                  ):
         self._value = value
@@ -117,5 +117,5 @@ class SpecialValueMapper:
         return special_value_series
 
     @property
-    def value(self) -> Number:
+    def value(self) -> object:
         return self._value
