@@ -86,3 +86,10 @@ def correlation_matrix(corr: DataFrame):
     for (i, j), z in np.ndenumerate(corr.to_numpy()):
         ax.text(j, i, '{:.2f}'.format(z), ha='center', va='center',
                 bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.3'))
+
+
+def cost_graph(costs: np.ndarray):
+    fig, ax = plt.subplots()
+    ax.plot(np.arange(1, len(costs) + 1), costs)
+    ax.set_xlabel('Iteration')
+    ax.set_ylabel('Cost')
