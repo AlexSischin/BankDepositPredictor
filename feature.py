@@ -12,11 +12,14 @@ def append_series(df: DataFrame, series: Series | Iterable[Series]) -> DataFrame
     return pd.concat([df] + series, axis=1)
 
 
-def create_polynomial(series: Series, degree: int, drop_first=False) -> list[Series]:
+def create_polynomial(series: Series, degree: int, drop_first=False, dtype=np.float64) -> list[Series]:
     if not issubclass(series.dtype.type, Number):
         raise ValueError('Series must be numeric')
     if degree < 2:
         raise ValueError(f'Degree must be >= 2. Got: {degree}')
+
+    if dtype is not None:
+        series = series.astype(dtype)
 
     term_series = [series]
     for d in range(2, degree + 1):
