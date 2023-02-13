@@ -6,13 +6,21 @@ import pandas as pd
 from pandas import Series, DataFrame
 
 
-def append_series(df: DataFrame, series: Series | Iterable[Series]) -> DataFrame:
+def append_series(
+        df: DataFrame,
+        series: Series | Iterable[Series]
+) -> DataFrame:
     if isinstance(series, Series):
         series = [series]
     return pd.concat([df] + series, axis=1)
 
 
-def create_polynomial(series: Series, degree: int, drop_first=False, dtype=np.float64) -> list[Series]:
+def create_polynomial(
+        series: Series,
+        degree: int,
+        drop_first=False,
+        dtype=np.float64
+) -> list[Series]:
     if not issubclass(series.dtype.type, Number):
         raise ValueError('Series must be numeric')
     if degree < 2:
@@ -30,15 +38,18 @@ def create_polynomial(series: Series, degree: int, drop_first=False, dtype=np.fl
 
 
 class MeanTargetMapper:
-    def __init__(
-            self,
-            categories: Series,
-            targets: Series
-    ):
+    def __init__(self,
+                 categories: Series,
+                 targets: Series,
+                 dtype=np.float64
+                 ):
         if categories.shape != targets.shape:
             raise ValueError('Categories and target values must have the same shape')
         if not issubclass(targets.dtype.type, Number):
             raise ValueError('Targets must be numeric')
+
+        if dtype is not None:
+            targets = targets.astype(dtype)
 
         c_name, v_name = categories.name, targets.name
         df = pd.concat((categories, targets), axis=1)
@@ -58,19 +69,20 @@ class MeanTargetMapper:
 
 
 class OneHotMapper:
-    def __init__(
-            self,
-            categories: Series,
-            drop_first=True
-    ):
+    def __init__(self,
+                 categories: Series,
+                 drop_first=True,
+                 dtype=np.float64
+                 ):
         self._categories = categories.unique()
         self._columns = [f'{categories.name}_is_{v}' for v in self._categories]
         self._column_dict = {k: v for k, v in zip(self._categories, self._columns)}
         self._drop_first = drop_first
+        self._dtype = dtype
 
     def map(self, categories: Series) -> list[Series]:
         zeros = np.zeros(shape=categories.shape)
-        dummy_series = [Series(zeros, dtype=int, name=c) for c in self._columns]
+        dummy_series = [Series(zeros, dtype=self._dtype, name=c) for c in self._columns]
         for cat, ser in zip(self._categories, dummy_series):
             ser[categories == cat] = 1
         return dummy_series[1:] if self._drop_first else dummy_series
@@ -90,12 +102,17 @@ class ZScoreNormalizer:
 
 
 class SpecialValueMapper:
-    def __init__(self, series: Series, value: Number):
+    def __init__(self,
+                 series: Series,
+                 value: Number,
+                 dtype=np.float64
+                 ):
         self._value = value
         self._name = f'{series.name}_is_{value}'
+        self._dtype = dtype
 
     def map(self, value_series: Series) -> Series:
-        special_value_series = (value_series == self._value).astype(int)
+        special_value_series = (value_series == self._value).astype(self._dtype)
         special_value_series.name = self._name
         return special_value_series
 
