@@ -93,15 +93,6 @@ class OneHotMapper:
         return self._column_dict
 
 
-class ZScoreNormalizer:
-    def __init__(self, feature: Series):
-        self._m = feature.mean()
-        self._sd = feature.std()
-
-    def scale(self, feature: Series):
-        return (feature - self._m) / self._sd
-
-
 class SpecialValueMapper:
     def __init__(self,
                  series: Series,
