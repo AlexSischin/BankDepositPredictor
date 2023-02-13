@@ -1,6 +1,7 @@
 from numbers import Number
 from typing import Iterable
 
+import numpy as np
 import pandas as pd
 from pandas import Series, DataFrame
 
@@ -67,7 +68,8 @@ class OneHotMapper:
         self._drop_first = drop_first
 
     def map(self, categories: Series) -> list[Series]:
-        dummy_series = [Series(0, dtype=float, name=c) for c in self._columns]
+        zeros = np.zeros(shape=categories.shape)
+        dummy_series = [Series(zeros, dtype=int, name=c) for c in self._columns]
         for cat, ser in zip(self._categories, dummy_series):
             ser[categories == cat] = 1
         return dummy_series[1:] if self._drop_first else dummy_series
