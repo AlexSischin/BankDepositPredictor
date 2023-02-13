@@ -8,7 +8,7 @@ def append_series(df: DataFrame, *args: Series) -> DataFrame:
     return pd.concat([df, pd.concat(args, axis=1, ignore_index=True)], axis=1, ignore_index=True)
 
 
-def create_polynomial(series: Series, degree: int, drop_first=True) -> list[Series]:
+def create_polynomial(series: Series, degree: int, drop_first=False) -> list[Series]:
     if not issubclass(series.dtype.type, Number):
         raise ValueError('Series must be numeric')
     if degree < 2:
@@ -87,7 +87,7 @@ class SpecialValueMapper:
         self._name = f'{series.name}_is_{value}'
 
     def map(self, value_series: Series) -> Series:
-        special_value_series = (value_series == self._value).as_type(int)
+        special_value_series = (value_series == self._value).astype(int)
         special_value_series.name = self._name
         return special_value_series
 
