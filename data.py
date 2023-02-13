@@ -1,10 +1,10 @@
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from pandas import DataFrame
 
-from util import positive_class_probability, count_bar
+from feature import OneHotMapper, append_series, create_polynomial, SpecialValueMapper
 
-pd.options.display.max_columns = 50
+pd.options.display.max_columns = 100
 pd.options.mode.use_inf_as_na = True
 
 COL_AGE = 'age'
@@ -26,10 +26,47 @@ COL_POUTCOME = 'poutcome'
 COL_Y = 'y'
 
 
+class MarketingFeatureBuilder:
+    def __init__(self, marketing_df: DataFrame):
+        self._job_mapper = OneHotMapper(marketing_df[COL_JOB])
+        self._marital_mapper = OneHotMapper(marketing_df[COL_MARITAL])
+        self._education_mapper = OneHotMapper(marketing_df[COL_EDUCATION])
+        self._default_mapper = OneHotMapper(marketing_df[COL_DEFAULT])
+        self._housing_mapper = OneHotMapper(marketing_df[COL_HOUSING])
+        self._loan_mapper = OneHotMapper(marketing_df[COL_LOAN])
+        self._contact_mapper = OneHotMapper(marketing_df[COL_CONTACT])
+        self._day_mapper = OneHotMapper(marketing_df[COL_DAY])
+        self._month_mapper = OneHotMapper(marketing_df[COL_MONTH])
+        self._pdays_mapper = SpecialValueMapper(marketing_df[COL_PDAYS], -1)
+        self._poutcome_mapper = OneHotMapper(marketing_df[COL_POUTCOME])
+
+    def build(self, marketing_df: DataFrame) -> DataFrame:
+        df = DataFrame()
+        a = append_series
+        df = a(df, create_polynomial(marketing_df[COL_AGE], 6))  # Age (polynomial)
+        df = a(df, self._job_mapper.map(marketing_df[COL_JOB]))  # Job (one-hot)
+        df = a(df, self._marital_mapper.map(marketing_df[COL_MARITAL]))  # Marital (one-hot)
+        df = a(df, self._education_mapper.map(marketing_df[COL_EDUCATION]))  # Education (one-hot)
+        df = a(df, self._default_mapper.map(marketing_df[COL_DEFAULT]))  # Default (one-hot)
+        df = a(df, create_polynomial(marketing_df[COL_BALANCE], 5))  # Balance (polynomial)
+        df = a(df, self._housing_mapper.map(marketing_df[COL_HOUSING]))  # Housing (one-hot)
+        df = a(df, self._loan_mapper.map(marketing_df[COL_LOAN]))  # Loan (one-hot)
+        df = a(df, self._contact_mapper.map(marketing_df[COL_CONTACT]))  # Contact (one-hot)
+        df = a(df, create_polynomial(marketing_df[COL_DAY], 6))  # Day (polynomial)
+        df = a(df, self._day_mapper.map(marketing_df[COL_DAY]))  # Day (one-hot)
+        df = a(df, self._month_mapper.map(marketing_df[COL_MONTH]))  # Month (one-hot)
+        df = a(df, create_polynomial(marketing_df[COL_DURATION], 5))  # Duration (polynomial)
+        df = a(df, create_polynomial(marketing_df[COL_CAMPAIGN], 5))  # Campaign (polynomial)
+        df = a(df, create_polynomial(marketing_df[COL_PDAYS], 5))  # Pdays (polynomial)
+        df = a(df, self._pdays_mapper.map(marketing_df[COL_PDAYS]))  # Pdays (dummy)
+        df = a(df, create_polynomial(marketing_df[COL_PREVIOUS], 5))  # Previous (polynomial)
+        df = a(df, self._poutcome_mapper.map(marketing_df[COL_POUTCOME]))  # Poutcome (one-hot)
+        return df.astype(np.float64)
+
+
 def read_deposit_data(file: str):
-    deposit_df = pd.read_csv(file, sep=';')
-    # print(deposit_df.info())
-    # positive_class_probability(deposit_df[COL_PREVIOUS], deposit_df[COL_Y], 'yes', categorical=False, bins=np.arange(0, 20))
-    count_bar(deposit_df[COL_PREVIOUS], categorical=False, bins=np.arange(0, 20))
-    # plot_correlation(deposit_df.corr(numeric_only=True))
-    plt.show()
+    marketing_df = pd.read_csv(file, sep=';')
+    fb = MarketingFeatureBuilder(marketing_df)
+    features_df = fb.build(marketing_df)
+
+    print(features_df)
