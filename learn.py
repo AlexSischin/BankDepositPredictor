@@ -11,15 +11,6 @@ def isfinite(*args):
     return True
 
 
-@dataclass(frozen=True)
-class LearningHistPoint:
-    cost: float
-    dj_dw: np.ndarray
-    dj_db: float
-    w: np.ndarray
-    b: float
-
-
 def zero_params(feature_count: int):
     return np.zeros(feature_count), 0.
 
@@ -42,6 +33,15 @@ def num_to_float64(n: Number) -> np.float64:
         raise ValueError(f'Expected numpy array. Got: {type(n)}')
 
 
+@dataclass(frozen=True)
+class LearningHistPoint:
+    cost: float
+    dj_dw: np.ndarray
+    dj_db: float
+    w: np.ndarray
+    b: float
+
+
 class LogisticRegressor:
     def __init__(self,
                  w: np.ndarray | None = None,
@@ -57,14 +57,14 @@ class LogisticRegressor:
     #   a - learning rate alpha
     #   l_ - regularization parameter lambda
     # Returns:
-    #   list[LearnHistPoint] - the history of learning, if debug set to True.
+    #   list[LearningHistPoint] - the history of learning, if debug set to True.
     def fit(self,
             x: np.ndarray,
             y: np.ndarray,
             it: int,
             a: Number,
             l_: Number
-            ):
+            ) -> list[LearningHistPoint]:
         x = arr_to_float64(x)
         y = arr_to_float64(y)
         a = num_to_float64(a)
@@ -81,6 +81,7 @@ class LogisticRegressor:
             self._b -= a * dj_db
             hp = LearningHistPoint(cost=self.cost(x, y, l_), dj_dw=dj_dw, dj_db=dj_db, w=np.copy(self._w), b=self._b)
             hist.append(hp)
+        return hist
 
     # Parameters:
     #   x - 2D array with shape (m, n), where m - number of training examples, n - number of features
