@@ -4,7 +4,7 @@ import pandas as pd
 from pandas import Series, DataFrame
 
 
-def concat_series(df: DataFrame, *args: Series) -> DataFrame:
+def append_series(df: DataFrame, *args: Series) -> DataFrame:
     rows = df.shape[0]
     for a in args:
         if a.size != rows:
@@ -12,7 +12,7 @@ def concat_series(df: DataFrame, *args: Series) -> DataFrame:
     return pd.concat([df, pd.concat(args, axis=1, ignore_index=True)], axis=1, ignore_index=True)
 
 
-def create_polynom(series: Series, degree: int, drop_first=True) -> list[Series]:
+def create_polynomial(series: Series, degree: int, drop_first=True) -> list[Series]:
     if not issubclass(series.dtype.type, Number):
         raise ValueError('Series must be numeric')
     if degree < 2:
@@ -72,3 +72,12 @@ class OneHotMapper:
     @property
     def column_dict(self) -> dict:
         return self._column_dict
+
+
+class ZScoreNormalizer:
+    def __init__(self, feature: Series):
+        self._m = feature.mean()
+        self._sd = feature.std()
+
+    def scale(self, feature: Series):
+        return (feature - self._m) / self._sd
