@@ -1,11 +1,16 @@
 from numbers import Number
+from typing import Iterable
 
 import pandas as pd
 from pandas import Series, DataFrame
 
 
-def append_series(df: DataFrame, *args: Series) -> DataFrame:
-    return pd.concat([df, pd.concat(args, axis=1, ignore_index=True)], axis=1, ignore_index=True)
+def append_series(df: DataFrame, series: Series | Iterable[Series]) -> DataFrame:
+    if isinstance(series, Series):
+        series = [series]
+    for s in series:
+        df = pd.concat([df, s], axis=1, ignore_index=True)
+    return df
 
 
 def create_polynomial(series: Series, degree: int, drop_first=False) -> list[Series]:
