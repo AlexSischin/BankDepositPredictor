@@ -81,10 +81,11 @@ class OneHotMapper:
         self._dtype = dtype
 
     def map(self, categories: Series) -> list[Series]:
-        zeros = np.zeros(shape=categories.shape)
-        dummy_series = [Series(zeros, dtype=self._dtype, name=c) for c in self._columns]
-        for cat, ser in zip(self._categories, dummy_series):
-            ser[categories == cat] = 1
+        dummy_series = []
+        for cat, col in zip(self._categories, self._columns):
+            ser = (categories == cat).astype(np.float64)
+            ser.name = col
+            dummy_series.append(ser)
         return dummy_series[1:] if self._drop_first else dummy_series
 
     @property
