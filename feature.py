@@ -9,9 +9,7 @@ from pandas import Series, DataFrame
 def append_series(df: DataFrame, series: Series | Iterable[Series]) -> DataFrame:
     if isinstance(series, Series):
         series = [series]
-    for s in series:
-        df = pd.concat([df, s], axis=1, ignore_index=True)
-    return df
+    return pd.concat([df] + series, axis=1)
 
 
 def create_polynomial(series: Series, degree: int, drop_first=False) -> list[Series]:
