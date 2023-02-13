@@ -62,11 +62,3 @@ class MarketingFeatureBuilder:
         df = a(df, create_polynomial(marketing_df[COL_PREVIOUS], 5))  # Previous (polynomial)
         df = a(df, self._poutcome_mapper.map(marketing_df[COL_POUTCOME]))  # Poutcome (one-hot)
         return df.astype(np.float64)
-
-
-def read_deposit_data(file: str):
-    marketing_df = pd.read_csv(file, sep=';')
-    fb = MarketingFeatureBuilder(marketing_df)
-    features_df = fb.build(marketing_df)
-
-    print(features_df)
