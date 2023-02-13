@@ -61,7 +61,7 @@ class OneHotMapper:
             drop_first=True
     ):
         self._categories = categories.unique()
-        self._columns = [f'{categories.name}_{v}' for v in self._categories]
+        self._columns = [f'{categories.name}_is_{v}' for v in self._categories]
         self._column_dict = {k: v for k, v in zip(self._categories, self._columns)}
         self._drop_first = drop_first
 
@@ -83,3 +83,18 @@ class ZScoreNormalizer:
 
     def scale(self, feature: Series):
         return (feature - self._m) / self._sd
+
+
+class SpecialValueMapper:
+    def __init__(self, series: Series, value: Number):
+        self._value = value
+        self._name = f'{series.name}_is_{value}'
+
+    def map(self, value_series: Series) -> Series:
+        special_value_series = (value_series == self._value).as_type(int)
+        special_value_series.name = self._name
+        return special_value_series
+
+    @property
+    def value(self) -> Number:
+        return self._value
