@@ -49,6 +49,8 @@ class LogisticRegressor:
                  ):
         self._w = arr_to_float64(w) if w is not None else None
         self._b = num_to_float64(b) if b is not None else None
+        self._x_mean = None
+        self._x_sd = None
 
     # Parameters:
     #   x - 2D array with shape (m, n), where m - number of training examples, n - number of features
@@ -72,15 +74,23 @@ class LogisticRegressor:
         if not isfinite(x, y, it, a, l_):
             raise ValueError(f'Input params must be finite numbers')
         if self._w is None or self._b is None:
-            self._w, self._b = zero_params(x.shape[1])
+            self._init_params(x)
+
+        self._init_scales(x)
+        x = self._scale(x)
 
         hist = []
         for i in range(it):
             dj_dw, dj_db = self._gradient(x, y, l_)
             self._w -= a * dj_dw
             self._b -= a * dj_db
-            hp = LearningHistPoint(cost=self.cost(x, y, l_), dj_dw=dj_dw, dj_db=dj_db, w=np.copy(self._w), b=self._b)
-            hist.append(hp)
+            hist.append(LearningHistPoint(
+                cost=self._cost(x, y, l_),
+                dj_dw=dj_dw,
+                dj_db=dj_db,
+                w=np.copy(self._w),
+                b=self._b
+            ))
         return hist
 
     # Parameters:
@@ -88,7 +98,10 @@ class LogisticRegressor:
     # Returns:
     #   np.ndarray - 1D array of estimates
     def predict(self, x: np.ndarray) -> np.ndarray:
-        x = arr_to_float64(x)
+        x = self._scale(arr_to_float64(x))
+        return self._predict(x)
+
+    def _predict(self, x: np.ndarray) -> np.ndarray:
         return sigmoid(x @ self._w + self._b)
 
     # Parameters:
@@ -100,8 +113,18 @@ class LogisticRegressor:
     def cost(self,
              x: np.ndarray,
              y: np.ndarray,
-             l_: float
-             ) -> float:
+             l_: Number
+             ) -> np.float64:
+        x = self._scale(arr_to_float64(x))
+        y = arr_to_float64(y)
+        l_ = num_to_float64(l_)
+        return self._cost(x, y, l_)
+
+    def _cost(self,
+              x: np.ndarray,
+              y: np.ndarray,
+              l_: np.float64
+              ) -> np.float64:
         mean_loss = np.mean(self._loss(x, y))
         w_regularizer = l_ / (2 * x.shape[0]) * np.sum(self._w ** 2)
         return mean_loss + w_regularizer
@@ -118,7 +141,17 @@ class LogisticRegressor:
                   y: np.ndarray,
                   l_: np.float64
                   ) -> tuple[np.ndarray, np.float64]:
-        error = self.predict(x) - y
+        error = self._predict(x) - y
         dj_dw = (error @ x + l_ * self._w) / x.shape[0]
         dj_db = np.float64(np.mean(error))
         return dj_dw, dj_db
+
+    def _init_params(self, x: np.ndarray):
+        self._w, self._b = zero_params(x.shape[1])
+
+    def _init_scales(self, x: np.ndarray) -> None:
+        self._x_mean = np.mean(x, axis=0)
+        self._x_sd = np.std(x, axis=0)
+
+    def _scale(self, x: np.ndarray) -> np.ndarray:
+        return (x - self._x_mean) / self._x_sd
