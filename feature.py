@@ -57,17 +57,19 @@ class MeanTargetMapper:
 class OneHotMapper:
     def __init__(
             self,
-            categories: Series
+            categories: Series,
+            drop_first=True
     ):
         self._categories = categories.unique()
         self._columns = [f'{categories.name}_{v}' for v in self._categories]
         self._column_dict = {k: v for k, v in zip(self._categories, self._columns)}
+        self._drop_first = drop_first
 
-    def map(self, categories: Series, drop_first=True) -> list[Series]:
+    def map(self, categories: Series) -> list[Series]:
         dummy_series = [Series(0, dtype=float, name=c) for c in self._columns]
         for cat, ser in zip(self._categories, dummy_series):
             ser[categories == cat] = 1
-        return dummy_series[1:] if drop_first else dummy_series
+        return dummy_series[1:] if self._drop_first else dummy_series
 
     @property
     def column_dict(self) -> dict:
