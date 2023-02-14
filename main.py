@@ -42,6 +42,18 @@ def train_model(x_df: DataFrame, y_df: Series) -> LogisticRegressor:
     return model
 
 
+def test_model(model: LogisticRegressor, x_df: DataFrame, y_df: Series):
+    x = x_df.to_numpy()
+    y = y_df.to_numpy()
+    y_hat = model.predict(x)
+
+    relative_error = np.abs(y - y_hat)
+    mean_error = np.mean(relative_error)
+    standard_error = np.std(relative_error) / np.sqrt(y.size)
+
+    print(f'Mean relative error: {mean_error:.2f} +- {standard_error:.2f}')
+
+
 def _main():
     train_deposit_df, test_deposit_df = read_deposit_data('dataset/bank-full.csv', 1000)
 
@@ -54,6 +66,7 @@ def _main():
     test_y_series = (test_deposit_df[COL_Y] == 'yes').astype(int)
 
     model = train_model(train_x_df, train_y_series)
+    test_model(model, test_x_df, test_y_series)
 
 
 if __name__ == '__main__':
