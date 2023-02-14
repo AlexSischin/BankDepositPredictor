@@ -56,11 +56,14 @@ def test_model(model: LogisticRegressor, x_df: DataFrame, y_df: Series, threshol
     y_pr = (y_hat > threshold).astype(int)
 
     conf_matrix = calc_confusion_matrix(y, y_pr)
-    accuracy = (conf_matrix[0, 0] + conf_matrix[1, 1]) / y.size
-    sensitivity = conf_matrix[1, 1] / (conf_matrix[:, 1].sum())
-    specificity = conf_matrix[0, 0] / (conf_matrix[:, 0].sum())
+    (tn, fp), (fn, tp) = conf_matrix
+    accuracy = (tn + tp) / y.size
+    precision = tp / (tp + fp)
+    sensitivity = tp / (tp + fn)
+    specificity = tn / (tn + fp)
 
     print(f'Accuracy: {accuracy * 100:.1f}%')
+    print(f'Precision: {precision * 100:.1f}%')
     print(f'Sensitivity: {sensitivity * 100:.1f}%')
     print(f'Specificity: {specificity * 100:.1f}%')
     confusion_matrix(conf_matrix)
