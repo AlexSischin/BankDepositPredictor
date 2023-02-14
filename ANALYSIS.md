@@ -9,6 +9,11 @@
 | Linear probability feature    | -        | Inverse logistic function of probability feature                |
 | Polynomial series of features | -        | Set of features, each representing some order of magnitude of X |
 
+# Goal
+
+Train a logistic regression model without using libraries for ML to predict whether a given bank customer will subscribe
+a term deposit.
+
 # Overview
 
 ![img.png](img/img.png)
