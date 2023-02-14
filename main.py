@@ -30,8 +30,8 @@ def train_model(x_df: DataFrame, y_df: Series) -> LogisticRegressor:
     model = LogisticRegressor()
     x = x_df.to_numpy()
     y = y_df.to_numpy()
-    it = 400
-    a = 1e-2
+    it = 500
+    a = 2
     l_ = 0
     hist = model.fit(x, y, it, a, l_)
 
