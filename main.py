@@ -67,7 +67,7 @@ def test_model(model: LogisticRegressor, x_df: DataFrame, y_df: Series):
     positive_examples = y.sum()
     positive_examples_ratio = positive_examples / total_examples
     print(f'Total examples: {total_examples}; '
-          f'Positive examples: {y.sum()} ({positive_examples_ratio * 100}%)')
+          f'Positive examples: {y.sum()} ({positive_examples_ratio * 100:.1f}%)')
 
 
 def _main():
