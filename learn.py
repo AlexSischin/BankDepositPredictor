@@ -2,6 +2,11 @@ from dataclasses import dataclass
 from numbers import Number
 
 import numpy as np
+import pandas as pd
+
+
+def calc_confusion_matrix(y_actual: np.ndarray, y_predicted: np.ndarray) -> np.ndarray:
+    return pd.crosstab(pd.Series(y_actual), pd.Series(y_predicted)).to_numpy()
 
 
 def isfinite(*args):

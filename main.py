@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 from pandas import DataFrame, Series
 
 from data import MarketingFeatureBuilder, COL_Y
-from learn import LogisticRegressor
+from learn import LogisticRegressor, calc_confusion_matrix
 from util import cost_graph, confusion_matrix
 
 log = logging.getLogger(__name__)
@@ -55,7 +55,15 @@ def test_model(model: LogisticRegressor, x_df: DataFrame, y_df: Series, threshol
     y_hat = model.predict(x)
     y_pr = (y_hat > threshold).astype(int)
 
-    confusion_matrix(y, y_pr)
+    conf_matrix = calc_confusion_matrix(y, y_pr)
+    accuracy = (conf_matrix[0, 0] + conf_matrix[1, 1]) / y.size
+    sensitivity = conf_matrix[1, 1] / (conf_matrix[:, 1].sum())
+    specificity = conf_matrix[0, 0] / (conf_matrix[:, 0].sum())
+
+    print(f'Accuracy: {accuracy * 100:.1f}%')
+    print(f'Sensitivity: {sensitivity * 100:.1f}%')
+    print(f'Specificity: {specificity * 100:.1f}%')
+    confusion_matrix(conf_matrix)
     plt.show()
 
 
