@@ -10,7 +10,7 @@ from util import cost_graph
 
 def read_deposit_data(file: str, test_examples: int) -> tuple[DataFrame, DataFrame]:
     marketing_df = pd.read_csv(file, sep=';')
-    marketing_df.sample(frac=1)
+    marketing_df = marketing_df.sample(frac=1)
     marketing_df = marketing_df.reset_index(drop=True)
 
     total = marketing_df.size
