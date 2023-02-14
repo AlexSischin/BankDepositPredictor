@@ -93,3 +93,14 @@ def cost_graph(costs: np.ndarray):
     ax.plot(np.arange(1, len(costs) + 1), costs)
     ax.set_xlabel('Iteration')
     ax.set_ylabel('Cost')
+
+
+def confusion_matrix(actual: np.ndarray, predicted: np.ndarray):
+    conf = pd.crosstab(pd.Series(actual), pd.Series(predicted))
+    fig, ax = plt.subplots()
+    ax.matshow(conf, cmap='PuBu')
+    ax.set_xlabel('Actual')
+    ax.set_ylabel('Predicted')
+    for (i, j), z in np.ndenumerate(conf.to_numpy()):
+        ax.text(j, i, '{:.0f}'.format(z), ha='center', va='center',
+                bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.3'))

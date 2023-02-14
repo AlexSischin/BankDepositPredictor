@@ -1,11 +1,13 @@
 import logging
+
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 from pandas import DataFrame, Series
+
 from data import MarketingFeatureBuilder, COL_Y
 from learn import LogisticRegressor
-from util import cost_graph
+from util import cost_graph, confusion_matrix
 
 log = logging.getLogger(__name__)
 
@@ -47,32 +49,14 @@ def train_model(x_df: DataFrame, y_df: Series) -> LogisticRegressor:
     return model
 
 
-def test_model(model: LogisticRegressor, x_df: DataFrame, y_df: Series):
+def test_model(model: LogisticRegressor, x_df: DataFrame, y_df: Series, threshold=0.5):
     x = x_df.to_numpy()
     y = y_df.to_numpy()
     y_hat = model.predict(x)
+    y_pr = (y_hat > threshold).astype(int)
 
-    relative_errors = np.abs(y - y_hat)
-    mean_error = np.mean(relative_errors)
-    standard_error = np.std(relative_errors) / np.sqrt(y.size)
-    print(f'Mean relative error: {mean_error * 100:.1f}% +- {standard_error * 100:.1f}')
-
-    guesses = np.rint(y_hat).astype(int)
-    total_guesses = guesses.size
-    positive_guesses = guesses.sum()
-    positive_guesses_ratio = positive_guesses / total_guesses
-    right_guesses = (y == guesses).astype(int).sum()
-    right_guess_ratio = right_guesses / total_guesses
-    print(
-        f'Total guesses: {total_guesses}; '
-        f'Right guesses: {right_guesses} ({right_guess_ratio * 100:.1f}%); '
-        f'Positive guesses: {positive_guesses} ({positive_guesses_ratio * 100:.1f}%)')
-
-    total_examples = y.size
-    positive_examples = y.sum()
-    positive_examples_ratio = positive_examples / total_examples
-    print(f'Total examples: {total_examples}; '
-          f'Positive examples: {y.sum()} ({positive_examples_ratio * 100:.1f}%)')
+    confusion_matrix(y, y_pr)
+    plt.show()
 
 
 def _main():
