@@ -56,7 +56,7 @@ def test_model(model: LogisticRegressor, x_df: DataFrame, y_df: Series):
     total_guesses = guesses.size
     right_guesses = (y == guesses).astype(int).sum()
     right_guess_ratio = right_guesses / total_guesses
-    print(f'Total guesses: {total_guesses}; Right guesses: {right_guesses:.1f} ({right_guess_ratio * 100:.1f}%)')
+    print(f'Total guesses: {total_guesses}; Right guesses: {right_guesses} ({right_guess_ratio * 100:.1f}%)')
 
     total_examples = y.size
     positive_examples = y.sum()
