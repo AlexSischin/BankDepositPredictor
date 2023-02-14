@@ -23,8 +23,8 @@ def create_polynomial(
 ) -> list[Series]:
     if not issubclass(series.dtype.type, Number):
         raise ValueError('Series must be numeric')
-    if degree < 2:
-        raise ValueError(f'Degree must be >= 2. Got: {degree}')
+    if degree < 1:
+        raise ValueError(f'Degree must be >= 1. Got: {degree}')
 
     if dtype is not None:
         series = series.astype(dtype)
