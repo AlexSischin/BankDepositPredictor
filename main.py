@@ -1,11 +1,13 @@
+import logging
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 from pandas import DataFrame, Series
-
 from data import MarketingFeatureBuilder, COL_Y
 from learn import LogisticRegressor
 from util import cost_graph
+
+log = logging.getLogger(__name__)
 
 
 def read_deposit_data(file: str, test_examples: int) -> tuple[DataFrame, DataFrame]:
@@ -34,6 +36,9 @@ def train_model(x_df: DataFrame, y_df: Series) -> LogisticRegressor:
     a = 2
     l_ = 0
     hist = model.fit(x, y, it, a, l_)
+
+    for h in hist:
+        log.info(f'\n{h}')
 
     costs = np.array([h.cost for h in hist])
     cost_graph(costs)
@@ -86,4 +91,7 @@ def _main():
 
 
 if __name__ == '__main__':
+    logfile = "./log/log.txt"
+    np.set_printoptions(linewidth=np.inf)
+    logging.basicConfig(filename=logfile, filemode='w', level=logging.INFO)
     _main()
