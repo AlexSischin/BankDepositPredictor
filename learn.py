@@ -33,7 +33,7 @@ def num_to_float64(n: Number) -> np.float64:
         raise ValueError(f'Expected numpy array. Got: {type(n)}')
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, repr=True)
 class LearningHistPoint:
     cost: float
     dj_dw: np.ndarray
