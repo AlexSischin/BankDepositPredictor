@@ -17,7 +17,7 @@ def read_deposit_data(file: str, test_examples: int) -> tuple[DataFrame, DataFra
     marketing_df = marketing_df.sample(frac=1)
     marketing_df = marketing_df.reset_index(drop=True)
 
-    total = marketing_df.size
+    total = marketing_df.shape[0]
 
     training_set = marketing_df.head(total - test_examples)
     test_set = marketing_df.tail(test_examples)
