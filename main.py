@@ -52,16 +52,22 @@ def test_model(model: LogisticRegressor, x_df: DataFrame, y_df: Series):
     standard_error = np.std(relative_errors) / np.sqrt(y.size)
     print(f'Mean relative error: {mean_error * 100:.1f}% +- {standard_error * 100:.1f}')
 
-    guesses = np.rint(y_hat)
+    guesses = np.rint(y_hat).astype(int)
     total_guesses = guesses.size
+    positive_guesses = guesses.sum()
+    positive_guesses_ratio = positive_guesses / total_guesses
     right_guesses = (y == guesses).astype(int).sum()
     right_guess_ratio = right_guesses / total_guesses
-    print(f'Total guesses: {total_guesses}; Right guesses: {right_guesses} ({right_guess_ratio * 100:.1f}%)')
+    print(
+        f'Total guesses: {total_guesses}; '
+        f'Right guesses: {right_guesses} ({right_guess_ratio * 100:.1f}%); '
+        f'Positive guesses: {positive_guesses} ({positive_guesses_ratio * 100:.1f}%)')
 
     total_examples = y.size
     positive_examples = y.sum()
     positive_examples_ratio = positive_examples / total_examples
-    print(f'Total examples: {y.size}; Positive examples: {y.sum()} ({positive_examples_ratio * 100}%)')
+    print(f'Total examples: {total_examples}; '
+          f'Positive examples: {y.sum()} ({positive_examples_ratio * 100}%)')
 
 
 def _main():
