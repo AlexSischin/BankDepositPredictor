@@ -133,7 +133,7 @@ class LogisticRegressor:
               x: np.ndarray,
               y: np.ndarray
               ) -> np.ndarray:
-        y_hat = self.predict(x)
+        y_hat = self._predict(x)
         return -y * np.log(y_hat) - (1 - y) * np.log(1 - y_hat)
 
     def _gradient(self,
