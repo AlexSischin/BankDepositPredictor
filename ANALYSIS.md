@@ -285,8 +285,9 @@ model has precision of 70.3% which means that if it predicted that some client w
 right with 70.3% chance. Also, it has sensitivity of 45.2% which means that if some client will subscribe a deposit if
 proposed, the model will detect him with probability of 45.2%.
 One-hot, probability and linear probability - all the encodings performed equally. Adding polynomial combinations of
-features didn't improve results. Overfitting wasn't detected as well. Therefore, we can propose that linear regression
-model may be not the best choice for this task. Sadly, picking the best model is not the goal of this project.
+features didn't improve results. Overfitting wasn't detected as well. Therefore, we should try some other machine
+learning algorythm - for example a neural network must perform better since we have a lot of data. Sadly, picking the
+best model is not the goal of this project.
 Nevertheless, this model does a pretty good job finding clients that would subscribe a term deposit (70.3% precision)
 among large list of clients. If a bank can reach out only a limited number of clients, this model can improve their
 marketing efficiency several times. And actually, the precision and sensitivity are a trade-off depending on the picked
