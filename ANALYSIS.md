@@ -258,6 +258,44 @@ text; non-null
 
 Classes will be: 1 (yes), 0 (no).
 
+# Test
+
+Examples: 1000
+
+Learning curve:
+
+![img_42.png](img/img_42.png)
+
+Confusion matrix:
+
+![img_43.png](img/img_43.png)
+
+| Metric      | Value |
+|-------------|-------|
+| Accuracy    | 91.5% |
+| Precision   | 70.3% |
+| Sensitivity | 45.2% |
+| Specificity | 97.5% |
+
+# Conclusion
+
+88.3% of the examples in the given dataset are negative, and only 11.7% are positive. If one would always pick 'no' as a
+prediction he would be accurate by 88.3%. This model performs with accuracy 91.5%, which is not great. However, the
+model has precision of 70.3% which means that if it predicted that some client would subscribe a deposit, it would be
+right with 70.3% chance. Also, it has sensitivity of 45.2% which means that if some client will subscribe a deposit if
+proposed, the model will detect him with probability of 45.2%.
+One-hot, probability and linear probability - all the encodings performed equally. Adding polynomial combinations of
+features didn't improve results. Overfitting wasn't detected as well. Therefore, we can propose that linear regression
+model may be not the best choice for this task. Sadly, picking the best model is not the goal of this project.
+Nevertheless, this model does a pretty good job finding clients that would subscribe a term deposit (70.3% precision)
+among large list of clients. If a bank can reach out only a limited number of clients, this model can improve their
+marketing efficiency several times. And actually, the precision and sensitivity are a trade-off depending on the picked
+threshold. Everything above was based on a threshold of 50%, meaning that model would pick only clients that would
+subscribe a deposit with a chance above 50%. The bigger threshold - the bigger precision, but less sensitivity, and vice
+versa.
+Also, this model can sort clients by probability of them subscribing a term deposit. Therefore, if a bank can reach out
+to every single client, the model still can help get subscriptions faster.
+
 # Source
 
 [Moro et al., 2011] S. Moro, R. Laureano and P. Cortez. Using Data Mining for Bank Direct Marketing: An Application of
